@@ -1,0 +1,15 @@
+{
+	"manifest_version": 2,
+	"name": "resizer",
+	"version": "2021.08.25",
+	"description": "Simple Chrome Window resizer, by Thibaud",
+	"permissions": [
+		"activeTab"
+	],
+	"background": {
+		"scripts": ["background.js"]
+	},
+	"browser_action": {
+		"default_title": "resize Window"
+	}
+}
