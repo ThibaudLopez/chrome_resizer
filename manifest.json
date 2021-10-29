@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "resizer",
-	"version": "2021.08.31",
+	"version": "2021.10.29",
 	"description": "Simple Chrome Window resizer, by Thibaud",
 	"permissions": [
 		"activeTab"
@@ -14,11 +14,11 @@
 	},
 	"commands": {
 		"resize_up": {
-			"suggested_key": { "default": "Alt+R" },
+			"suggested_key": { "default": "Alt+S" },
 			"description": "resize up"
 		},
 		"resize_down": {
-			"suggested_key": { "default": "Alt+Shift+R" },
+			"suggested_key": { "default": "Alt+Shift+S" },
 			"description": "resize down"
 		}
 	}
