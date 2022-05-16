@@ -1,25 +1,27 @@
 {
-	"manifest_version": 2,
+	"manifest_version": 3,
 	"name": "resizer",
-	"version": "2021.10.29",
-	"description": "Simple Chrome Window resizer, by Thibaud",
-	"permissions": [
-		"activeTab"
-	],
+	"version": "2022.05.16",
+	"description": "Simple Google Chrome Window resizer, by Thibaud",
 	"background": {
-		"scripts": ["background.js"]
-	},
-	"browser_action": {
-		"default_title": "resize Window"
+		"service_worker": "background.js"
 	},
 	"commands": {
-		"resize_up": {
-			"suggested_key": { "default": "Alt+S" },
-			"description": "resize up"
+		"resize_bigger": {
+			"suggested_key": "Alt+S",
+			"description": "resize bigger"
 		},
-		"resize_down": {
-			"suggested_key": { "default": "Alt+Shift+S" },
-			"description": "resize down"
+		"resize_smaller": {
+			"suggested_key": "Alt+Shift+S",
+			"description": "resize smaller"
+		},
+		"resize_higher": {
+			"suggested_key": "Alt+A",
+			"description": "resize higher"
+		},
+		"resize_shorter": {
+			"suggested_key": "Alt+Shift+A",
+			"description": "resize shorter"
 		}
 	}
 }
