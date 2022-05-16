@@ -2,8 +2,8 @@
 // https://en.wikipedia.org/wiki/List_of_common_resolutions#/media/File:Vector_Video_Standards.svg
 var resolutions = [
 	// 4:3 ratios
-	// { width: 640,  height: 480  },
-	// { width: 800,  height: 600  },
+	{ width: 640,  height: 480  },
+	{ width: 800,  height: 600  },
 	{ width: 1024, height: 768  },
 	{ width: 1280, height: 960  },
 	{ width: 1600, height: 1200 },
@@ -39,7 +39,7 @@ function resize(command) {
 			// default
 			resolution = resolutions[default_resolution];
 		} else {
-			if (command === "resize_down") {
+			if (command === "resize_smaller") {
 				if (i === 0) {
 					// rollover
 					resolution = resolutions[resolutions.length - 1];
@@ -47,7 +47,7 @@ function resize(command) {
 					// smaller
 					resolution = resolutions[i - 1];
 				}
-			} else if (command === "resize_up") {
+			} else if (command === "resize_bigger") {
 				if (i === resolutions.length - 1) {
 					// rollover
 					resolution = resolutions[0];
@@ -55,16 +55,18 @@ function resize(command) {
 					// bigger
 					resolution = resolutions[i + 1];
 				}
+			} else if (command === "resize_higher") {
+				resolution = resolutions[i];
+				resolution.height += 50;
+			} else if (command === "resize_shorter") {
+				resolution = resolutions[i];
+				resolution.height -= 50;
 			}
 		}
 		// resize
 		chrome.windows.update(chrome.windows.WINDOW_ID_CURRENT, { width: resolution.width, height: resolution.height });
 	});
 }
-
-chrome.browserAction.onClicked.addListener((tab) => {
-	resize("resize_up");
-});
 
 chrome.commands.onCommand.addListener((command) => {
 	resize(command);
