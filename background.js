@@ -37,7 +37,7 @@ function resize(command) {
 		var resolution;
 		if (i === -1) {
 			// default
-			resolution = resolutions[default_resolution];
+			resolution = {...resolutions[default_resolution]};
 		} else {
 			if (command === "resize_smaller") {
 				if (i === 0) {
