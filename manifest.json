@@ -1,11 +1,15 @@
 {
 	"manifest_version": 3,
 	"name": "resizer",
-	"version": "2022.05.16",
-	"description": "Simple Google Chrome Window resizer, by Thibaud",
+	"version": "2023.04.16",
+	"description": "Simple Google Chrome Window resizer + compacter + highlighter, by Thibaud",
 	"background": {
 		"service_worker": "background.js"
 	},
+	"content_scripts": [{
+		"matches": ["https://*/*"],
+		"js": ["content.js"]
+	}],
 	"commands": {
 		"resize_bigger": {
 			"suggested_key": "Alt+S",
