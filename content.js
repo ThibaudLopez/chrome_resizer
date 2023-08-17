@@ -21,8 +21,16 @@ function onKeyUp(event) {
 	if (event.altKey === true && event.code === 'KeyY') {
 		yellowing = !yellowing; // toggle yellowing
 	}
+	if (event.altKey === true && event.code === 'KeyG') {
+		// grayscale the last clicked element (remember to click the element)
+		if (lastMouseClick) {
+			grayscale_all_but(lastMouseClick);
+		}
+	}
 }
 
+// highlight the specified element yellow
+// press ALT+Y to start highlighting elements on mouse over to find the desired element, press ALT+Y again to stop
 function highlight(element) {
 	// highlight this element yellow
 	const originalBackgroundColor = element.style.backgroundColor;
@@ -34,6 +42,29 @@ function highlight(element) {
 	[...element.children].forEach((child) => highlight(child));
 }
 
+// grayscale the entire page except the specified element
+// solution by ChatGPT
+function grayscale_all_but(element) {
+	// Apply grayscale filter to all elements
+	Array.from(document.querySelectorAll('body *')).forEach((e) => {
+		e.style.filter = 'grayscale(100%)';
+	});
+	// Function to remove filter from an element
+	function removeFilter(e) {
+		e.style.filter = 'none';
+	}
+	// Remove filter from the specified element
+	removeFilter(element);
+	// Remove filter from all descendants of the specified element
+	Array.from(element.querySelectorAll('*')).forEach(removeFilter);
+	// Remove filter from all ancestors of the specified element
+	let parent = element.parentElement;
+	while (parent != null) {
+		removeFilter(parent);
+		parent = parent.parentElement;
+	}
+}
+
 // MouseEvent handler
 function onMouseOver(event) {
 	if (yellowing) {
@@ -42,7 +73,9 @@ function onMouseOver(event) {
 }
 
 // PointerEvent handler
+let lastMouseClick;
 function onClick(event) {
+	lastMouseClick = event.target;
 	if (yellowing) {
 		if (event.target.style.backgroundColor === 'yellow') {
 			event.target.style.backgroundColor = '';
