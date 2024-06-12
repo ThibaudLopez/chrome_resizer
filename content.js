@@ -1,16 +1,43 @@
 // are we yellowing?
 let yellowing = false;
 
+// how much to compact?
+let compact_factor = 0;
+
 // compact the web page for screenshots
 function compact() {
+	console.log('compact_factor', compact_factor);
+	if (compact_factor >= 0) {
+		document.body.style.overflow = 'visible';
+	}
+	if (compact_factor >= 1) {
+		document.body.style.setProperty('overflow', 'visible', 'important');
+	}
 	[...document.querySelectorAll('*')].forEach((e) => {
-		e.style.marginTop = "0px";
-		e.style.marginBottom = "0px";
-		e.style.paddingTop = "0px";
-		e.style.paddingBottom = "0px";
-		e.style.lineHeight = "";
-		// PENDING: scrollbar, remove !important
+		if (compact_factor >= 0) {
+			e.style.marginTop = '0px';
+			e.style.marginBottom = '0px';
+			e.style.paddingTop = '0px';
+			e.style.paddingBottom = '0px';
+		}
+		if (compact_factor >= 1) {
+			e.style.lineHeight = '1em'; // PENDING: or empty string ""
+			e.style.fontSize = '1em';
+			e.style.justifyContent = 'normal';
+			e.style.height = 'fit-content'; // or min-content
+		}
+		if (compact_factor >= 2) {
+			e.style.setProperty('margin-top', '0px', 'important');
+			e.style.setProperty('margin-bottom', '0px', 'important');
+			e.style.setProperty('padding-top', '0px', 'important');
+			e.style.setProperty('padding-bottom', '0px', 'important');
+			e.style.setProperty('line-height', '1em', 'important');
+			e.style.setProperty('font-size', '1em', 'important');
+			e.style.setProperty('justify-content', 'normal', 'important');
+			e.style.setProperty('height', 'fit-content', 'important');
+		}
 	});
+	compact_factor++;
 }
 
 // KeyboardEvent handler
@@ -74,7 +101,7 @@ function onMouseOver(event) {
 
 // PointerEvent handler
 let lastMouseClick;
-function onClick(event) {
+function onMousedown(event) {
 	lastMouseClick = event.target;
 	if (yellowing) {
 		if (event.target.style.backgroundColor === 'yellow') {
@@ -88,5 +115,5 @@ function onClick(event) {
 if (window === top) {
 	window.addEventListener('keyup', onKeyUp, false);
 	window.addEventListener('mouseover', onMouseOver, false);
-	window.addEventListener('click', onClick, false);
+	window.addEventListener('mousedown', onMousedown, false);
 }
