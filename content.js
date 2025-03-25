@@ -4,6 +4,13 @@ let yellowing = false;
 // how much to compact?
 let compact_factor = 0;
 
+// polyfill or error `$x is not defined`
+// https://codereview.stackexchange.com/a/237631
+function xpath(expression, context) {
+	var result = document.evaluate(expression, context, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+	return Array.from({ length: result.snapshotLength }, (_, i) => result.snapshotItem(i));
+}
+
 // compact the web page for screenshots
 function compact() {
 	console.log('compact_factor', compact_factor);
@@ -12,6 +19,17 @@ function compact() {
 	}
 	if (compact_factor >= 1) {
 		document.body.style.setProperty('overflow', 'visible', 'important');
+	}
+	if (compact_factor >= 2) {
+		xpath('//br', document).forEach((e) => e.remove());
+	}
+	if (compact_factor >= 3) {
+		xpath('//img', document).forEach((e) => e.width /= 2);
+		[...document.querySelectorAll('svg')].forEach((e) => {
+			// e.style.transform = `scale(${1 / 2**(compact_factor - 2)})`;
+			e.style.width = e.getBoundingClientRect().width / 2 + "px";
+			e.style.height = e.getBoundingClientRect().height / 2 + "px";
+		});
 	}
 	[...document.querySelectorAll('*')].forEach((e) => {
 		if (compact_factor >= 0) {
