@@ -1,6 +1,6 @@
 // list of common resolutions
 // https://en.wikipedia.org/wiki/List_of_common_resolutions#/media/File:Vector_Video_Standards.svg
-var resolutions = [
+const resolutions = [
 	// 4:3 ratios
 	{ width: 640,  height: 480  },
 	{ width: 800,  height: 600  },
@@ -11,38 +11,43 @@ var resolutions = [
 ];
 
 // default resolution
-var default_resolution = 1;
+const default_resolution = 1;
 
 // snap to margin
-var margin = 0.10; // 10%
+const margin = 0.10; // 10%
 
 // returns true if the specified value is within margin of target
 function within(value, margin /*[0,1]*/, target) {
-	var low = (target * (1 - margin));
-	var high = (target * (1 + margin));
+	const low = (target * (1 - margin));
+	const high = (target * (1 + margin));
 	return (value >= low && value <= high);
 }
 
 // find this Chrome window's closest resolution from the array of resolutions, and returns the array index
 function get_closest_resolution(window) {
-	return resolutions.findIndex(s => within(window.width, margin, s.width) && within(window.height, margin, s.height));
+	return resolutions.findIndex((s) => within(window.width, margin, s.width));
+}
+
+// deep copy the specified object
+function deep_copy(o) {
+	return JSON.parse(JSON.stringify(o));
 }
 
 // resize this Chrome window in the specified direction, up or down
 function resize(command) {
 	chrome.windows.getCurrent(window => {
 		// current resolution?
-		var i = get_closest_resolution(window);
+		const i = get_closest_resolution(window);
 		// next resolution?
-		var resolution;
+		let resolution;
 		if (i === -1) {
 			// default
-			resolution = {...resolutions[default_resolution]};
+			resolution = deep_copy({...resolutions[default_resolution]});
 		} else {
 			if (command === "resize_smaller") {
 				if (i === 0) {
 					// rollover
-					resolution = resolutions[resolutions.length - 1];
+					resolution = deep_copy(resolutions[resolutions.length - 1]);
 				} else {
 					// smaller
 					resolution = resolutions[i - 1];
