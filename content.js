@@ -27,8 +27,11 @@ function compact() {
 		xpath('//img', document).forEach((e) => e.width /= 2);
 		[...document.querySelectorAll('svg')].forEach((e) => {
 			// e.style.transform = `scale(${1 / 2**(compact_factor - 2)})`;
-			e.style.width = e.getBoundingClientRect().width / 2 + "px";
-			e.style.height = e.getBoundingClientRect().height / 2 + "px";
+			const rect = e.getBoundingClientRect();
+			const width = rect.width;
+			const height = rect.height;
+			e.style.width = width / 2 + "px";
+			e.style.height = height / 2 + "px";
 		});
 	}
 	[...document.querySelectorAll('*')].forEach((e) => {
