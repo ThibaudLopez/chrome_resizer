@@ -1,5 +1,10 @@
-// are we yellowing?
+'use strict';
+
+// are we coloring yellow?
 let yellowing = false;
+
+// are we coloring red?
+let reding = false;
 
 // how much to compact?
 let compact_factor = 0;
@@ -46,6 +51,7 @@ function compact() {
 			e.style.fontSize = '1em';
 			e.style.justifyContent = 'normal';
 			e.style.height = 'fit-content'; // or min-content
+			e.style.rowGap = '0';
 		}
 		if (compact_factor >= 2) {
 			e.style.setProperty('margin-top', '0px', 'important');
@@ -56,6 +62,7 @@ function compact() {
 			e.style.setProperty('font-size', '1em', 'important');
 			e.style.setProperty('justify-content', 'normal', 'important');
 			e.style.setProperty('height', 'fit-content', 'important');
+			e.style.setProperty('row-gap', '0', 'important');
 		}
 	});
 	compact_factor++;
@@ -64,12 +71,19 @@ function compact() {
 // KeyboardEvent handler
 function onKeyUp(event) {
 	if (event.altKey === true && event.code === 'KeyC') {
+		// ALT+C
 		compact();
 	}
 	if (event.altKey === true && event.code === 'KeyY') {
+		// ALT+Y
 		yellowing = !yellowing; // toggle yellowing
 	}
+	if (event.altKey === true && event.code === 'KeyR') {
+		// ALT+R
+		reding = !reding; // toggle reding
+	}
 	if (event.altKey === true && event.code === 'KeyG') {
+		// ALT+G
 		// grayscale the last clicked element (remember to click the element)
 		if (lastMouseClick) {
 			grayscale_all_but(lastMouseClick);
@@ -77,16 +91,16 @@ function onKeyUp(event) {
 	}
 }
 
-// highlight the specified element yellow
+// highlight the specified element with a random color
 // press ALT+Y to start highlighting elements on mouse over to find the desired element, press ALT+Y again to stop
 function highlight(element) {
-	// highlight this element yellow
+	// highlight this element
 	const originalBackgroundColor = element.style.backgroundColor;
 	element.style.backgroundColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
 	window.setTimeout(function () {
 		element.style.backgroundColor = originalBackgroundColor;
 	}, 100);
-	// highlight the children elements yellow
+	// highlight the children elements
 	[...element.children].forEach((child) => highlight(child));
 }
 
@@ -115,7 +129,7 @@ function grayscale_all_but(element) {
 
 // MouseEvent handler
 function onMouseOver(event) {
-	if (yellowing) {
+	if (yellowing || reding) {
 		highlight(event.target);
 	}
 }
@@ -129,6 +143,12 @@ function onMousedown(event) {
 			event.target.style.backgroundColor = '';
 		} else {
 			event.target.style.backgroundColor = 'yellow';
+		}
+	} else if (reding) {
+		if (event.target.style.backgroundColor === 'darkred') {
+			event.target.style.backgroundColor = '';
+		} else {
+			event.target.style.backgroundColor = 'darkred';
 		}
 	}
 }
